@@ -17,25 +17,42 @@ A tabela `item_pedido` resolve o relacionamento N:N entre `pedido` e `produto`.
 ## Pre-requisitos
 
 - [.NET SDK 10](https://dotnet.microsoft.com/) (`dotnet --version`)
-- Servidor MySQL em execucao (MySQL Server, XAMPP, Docker, etc.)
+- Um servidor MySQL. A forma recomendada e via **Docker** (ver abaixo).
 
-## 1. Criar e popular o banco
+## 1. Subir o banco com Docker (recomendado)
 
-Execute os scripts SQL na ordem abaixo (via MySQL Workbench, DBeaver ou linha de comando):
+O arquivo [`docker-compose.yml`](docker-compose.yml) ja sobe o MySQL 8 na porta 3306,
+cria o banco `ecommerce_m3` e executa automaticamente os scripts de `sql/` na primeira
+inicializacao (cria as tabelas e popula os dados de exemplo).
 
 ```bash
-mysql -u root -p < sql/01_schema.sql   # cria o schema e as tabelas
-mysql -u root -p < sql/02_seed.sql      # popula com dados de exemplo
+docker compose up -d        # sobe o MySQL e roda 01_schema.sql + 02_seed.sql
+docker compose ps           # confere se o container esta "Up"
 ```
+
+Usuario: `root` | Senha: `senha123` | Banco: `ecommerce_m3` (definidos no compose).
+
+Comandos uteis:
+
+```bash
+docker compose down         # para o container (mantem os dados no volume)
+docker compose down -v      # para e APAGA os dados (recria do zero no proximo up)
+```
+
+> Alternativa sem Docker: rode os scripts manualmente num MySQL local
+> (MySQL Workbench, DBeaver ou `mysql -u root -p < sql/01_schema.sql` e depois
+> `sql/02_seed.sql`).
 
 ## 2. Configurar a conexao
 
-Edite a connection string em [`src/ECommerceM3/Data/Conexao.cs`](src/ECommerceM3/Data/Conexao.cs)
-com o usuario e a senha do seu MySQL:
+A connection string em [`src/ECommerceM3/Data/Conexao.cs`](src/ECommerceM3/Data/Conexao.cs)
+ja vem alinhada com o `docker-compose.yml`:
 
 ```csharp
-"Server=localhost;Port=3306;Database=ecommerce_m3;User ID=root;Password=SUA_SENHA;"
+"Server=localhost;Port=3306;Database=ecommerce_m3;User ID=root;Password=senha123;"
 ```
+
+Ajuste apenas se usar outro MySQL/senha/porta.
 
 ## 3. Executar a aplicacao
 
@@ -51,6 +68,7 @@ Um menu de console sera exibido com os CRUDs das quatro entidades centrais
 
 ```
 ECommerceM3/
+├── docker-compose.yml       # sobe o MySQL 8 e roda os scripts de sql/ no 1o boot
 ├── sql/
 │   ├── 01_schema.sql        # CREATE DATABASE + tabelas (PK/FK/constraints)
 │   └── 02_seed.sql          # INSERTs de dados de exemplo

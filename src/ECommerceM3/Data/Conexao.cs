@@ -6,9 +6,10 @@ namespace ECommerceM3.Data;
 // Ajuste a connection string conforme o seu ambiente (usuario/senha/porta).
 public static class Conexao
 {
-    // ATENCAO: altere "senha" para a senha do seu MySQL local.
+    // Senha alinhada com a definida no docker-compose.yml (MYSQL_ROOT_PASSWORD).
+    // Ajuste se o seu MySQL usar outra senha/porta.
     private const string ConnectionString =
-        "Server=localhost;Port=3306;Database=ecommerce_m3;User ID=root;Password=senha;";
+        "Server=localhost;Port=3306;Database=ecommerce_m3;User ID=root;Password=senha123;";
 
     public static MySqlConnection Criar()
     {

@@ -1,0 +1,19 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-m3
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: senha123
+      MYSQL_DATABASE: ecommerce_m3
+    ports:
+      - "3306:3306"
+    volumes:
+      # Persiste os dados do banco entre reinicios do container
+      - mysql_m3_data:/var/lib/mysql
+      # Scripts em initdb sao executados automaticamente na PRIMEIRA criacao do container,
+      # em ordem alfabetica (01_schema.sql e depois 02_seed.sql).
+      - ./sql:/docker-entrypoint-initdb.d:ro
+
+volumes:
+  mysql_m3_data:
