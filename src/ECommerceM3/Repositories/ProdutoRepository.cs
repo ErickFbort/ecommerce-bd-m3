@@ -7,11 +7,11 @@ namespace ECommerceM3.Repositories;
 // CRUD da entidade Produto usando ADO.NET (SQL parametrizado).
 public class ProdutoRepository
 {
-    // CREATE: INSERT INTO produto (nome, descricao, preco, estoque, categoria_id) VALUES (...)
+    // CREATE: INSERT INTO produto (nome, descricao, preco, estoque, id_categoria) VALUES (...)
     public int Inserir(Produto produto)
     {
         using var conexao = Conexao.Criar();
-        const string sql = @"INSERT INTO produto (nome, descricao, preco, estoque, categoria_id)
+        const string sql = @"INSERT INTO produto (nome, descricao, preco, estoque, id_categoria)
                              VALUES (@nome, @descricao, @preco, @estoque, @categoriaId);
                              SELECT LAST_INSERT_ID();";
         using var cmd = new MySqlCommand(sql, conexao);
@@ -29,9 +29,9 @@ public class ProdutoRepository
         var lista = new List<Produto>();
         using var conexao = Conexao.Criar();
         const string sql = @"SELECT p.id, p.nome, p.descricao, p.preco, p.estoque,
-                                    p.categoria_id, c.nome AS categoria_nome
+                                    p.id_categoria, c.nome AS categoria_nome
                              FROM produto p
-                             INNER JOIN categoria c ON c.id = p.categoria_id
+                             INNER JOIN categoria c ON c.id = p.id_categoria
                              ORDER BY p.nome;";
         using var cmd = new MySqlCommand(sql, conexao);
         using var reader = cmd.ExecuteReader();
@@ -45,9 +45,9 @@ public class ProdutoRepository
     {
         using var conexao = Conexao.Criar();
         const string sql = @"SELECT p.id, p.nome, p.descricao, p.preco, p.estoque,
-                                    p.categoria_id, c.nome AS categoria_nome
+                                    p.id_categoria, c.nome AS categoria_nome
                              FROM produto p
-                             INNER JOIN categoria c ON c.id = p.categoria_id
+                             INNER JOIN categoria c ON c.id = p.id_categoria
                              WHERE p.id = @id;";
         using var cmd = new MySqlCommand(sql, conexao);
         cmd.Parameters.AddWithValue("@id", id);
@@ -61,7 +61,7 @@ public class ProdutoRepository
         using var conexao = Conexao.Criar();
         const string sql = @"UPDATE produto
                              SET nome = @nome, descricao = @descricao, preco = @preco,
-                                 estoque = @estoque, categoria_id = @categoriaId
+                                 estoque = @estoque, id_categoria = @categoriaId
                              WHERE id = @id;";
         using var cmd = new MySqlCommand(sql, conexao);
         cmd.Parameters.AddWithValue("@nome", produto.Nome);
@@ -90,7 +90,7 @@ public class ProdutoRepository
         Descricao = reader.IsDBNull(reader.GetOrdinal("descricao")) ? null : reader.GetString("descricao"),
         Preco = reader.GetDecimal("preco"),
         Estoque = reader.GetInt32("estoque"),
-        CategoriaId = reader.GetInt32("categoria_id"),
+        CategoriaId = reader.GetInt32("id_categoria"),
         CategoriaNome = reader.GetString("categoria_nome")
     };
 }

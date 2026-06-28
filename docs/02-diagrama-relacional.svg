@@ -58,8 +58,8 @@
   <rect class="hdr" x="60" y="320" width="220" height="30" rx="6"/><rect class="hdr" x="60" y="338" width="220" height="12"/>
   <text class="hdrT" x="170" y="340">item_pedido</text>
   <line class="rowln" x1="60" y1="380" x2="280" y2="380"/><line class="rowln" x1="60" y1="410" x2="280" y2="410"/><line class="rowln" x1="60" y1="440" x2="280" y2="440"/>
-  <text class="tagpk" x="72" y="374">PK FK</text><text class="colpk" x="118" y="374">pedido_id</text><text class="typ" x="272" y="374">INT</text>
-  <text class="tagpk" x="72" y="404">PK FK</text><text class="colpk" x="118" y="404">produto_id</text><text class="typ" x="272" y="404">INT</text>
+  <text class="tagpk" x="72" y="374">PK FK</text><text class="colpk" x="118" y="374">id_pedido</text><text class="typ" x="272" y="374">INT</text>
+  <text class="tagpk" x="72" y="404">PK FK</text><text class="colpk" x="118" y="404">id_produto</text><text class="typ" x="272" y="404">INT</text>
   <text class="col" x="118" y="434">quantidade</text><text class="typ" x="272" y="434">INT</text>
   <text class="col" x="118" y="464">preco_unitario</text><text class="typ" x="272" y="464">DECIMAL(10,2)</text>
 
@@ -69,7 +69,7 @@
   <text class="hdrT" x="495" y="130">pedido</text>
   <line class="rowln" x1="380" y1="170" x2="610" y2="170"/><line class="rowln" x1="380" y1="200" x2="610" y2="200"/><line class="rowln" x1="380" y1="230" x2="610" y2="230"/><line class="rowln" x1="380" y1="260" x2="610" y2="260"/>
   <text class="tagpk" x="392" y="164">PK</text><text class="colpk" x="438" y="164">id</text><text class="typ" x="602" y="164">INT</text>
-  <text class="tagfk" x="392" y="194">FK</text><text class="colfk" x="438" y="194">cliente_id</text><text class="typ" x="602" y="194">INT</text>
+  <text class="tagfk" x="392" y="194">FK</text><text class="colfk" x="438" y="194">id_cliente</text><text class="typ" x="602" y="194">INT</text>
   <text class="col" x="438" y="224">data_pedido</text><text class="typ" x="602" y="224">DATETIME</text>
   <text class="col" x="438" y="254">status</text><text class="typ" x="602" y="254">VARCHAR(30)</text>
   <text class="col" x="438" y="284">valor_total</text><text class="typ" x="602" y="284">DECIMAL(10,2)</text>
@@ -84,7 +84,7 @@
   <text class="col" x="438" y="604">descricao</text><text class="typ" x="602" y="604">VARCHAR(500)</text>
   <text class="col" x="438" y="634">preco</text><text class="typ" x="602" y="634">DECIMAL(10,2)</text>
   <text class="col" x="438" y="664">estoque</text><text class="typ" x="602" y="664">INT</text>
-  <text class="tagfk" x="392" y="694">FK</text><text class="colfk" x="438" y="694">categoria_id</text><text class="typ" x="602" y="694">INT</text>
+  <text class="tagfk" x="392" y="694">FK</text><text class="colfk" x="438" y="694">id_categoria</text><text class="typ" x="602" y="694">INT</text>
 
   <!-- ===== cliente ===== -->
   <rect class="tbl" x="1000" y="90" width="240" height="180" rx="6"/>
@@ -103,7 +103,7 @@
   <text class="hdrT" x="1120" y="330">telefone_cliente</text>
   <line class="rowln" x1="1000" y1="370" x2="1240" y2="370"/><line class="rowln" x1="1000" y1="400" x2="1240" y2="400"/><line class="rowln" x1="1000" y1="430" x2="1240" y2="430"/>
   <text class="tagpk" x="1012" y="364">PK</text><text class="colpk" x="1058" y="364">id</text><text class="typ" x="1232" y="364">INT</text>
-  <text class="tagfk" x="1012" y="394">FK</text><text class="colfk" x="1058" y="394">cliente_id</text><text class="typ" x="1232" y="394">INT</text>
+  <text class="tagfk" x="1012" y="394">FK</text><text class="colfk" x="1058" y="394">id_cliente</text><text class="typ" x="1232" y="394">INT</text>
   <text class="col" x="1058" y="424">numero</text><text class="typ" x="1232" y="424">VARCHAR(20)</text>
   <text class="col" x="1058" y="454">tipo</text><text class="typ" x="1232" y="454">VARCHAR(20)</text>
 

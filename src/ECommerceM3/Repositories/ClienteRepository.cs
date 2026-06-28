@@ -10,7 +10,7 @@ public class ClienteRepository
 {
     // CREATE: insere o cliente e seus telefones dentro de uma transacao.
     //   INSERT INTO cliente (nome, email, cpf) VALUES (...);
-    //   INSERT INTO telefone_cliente (cliente_id, numero, tipo) VALUES (...);
+    //   INSERT INTO telefone_cliente (id_cliente, numero, tipo) VALUES (...);
     public int Inserir(Cliente cliente)
     {
         using var conexao = Conexao.Criar();
@@ -41,10 +41,10 @@ public class ClienteRepository
         }
     }
 
-    // INSERT INTO telefone_cliente (cliente_id, numero, tipo) VALUES (...)
+    // INSERT INTO telefone_cliente (id_cliente, numero, tipo) VALUES (...)
     private static void InserirTelefone(MySqlConnection conexao, MySqlTransaction tx, int clienteId, TelefoneCliente tel)
     {
-        const string sql = @"INSERT INTO telefone_cliente (cliente_id, numero, tipo)
+        const string sql = @"INSERT INTO telefone_cliente (id_cliente, numero, tipo)
                              VALUES (@clienteId, @numero, @tipo);";
         using var cmd = new MySqlCommand(sql, conexao, tx);
         cmd.Parameters.AddWithValue("@clienteId", clienteId);
@@ -73,13 +73,13 @@ public class ClienteRepository
             }
         }
 
-        const string sqlTel = @"SELECT id, cliente_id, numero, tipo FROM telefone_cliente;";
+        const string sqlTel = @"SELECT id, id_cliente, numero, tipo FROM telefone_cliente;";
         using (var cmd = new MySqlCommand(sqlTel, conexao))
         using (var reader = cmd.ExecuteReader())
         {
             while (reader.Read())
             {
-                var clienteId = reader.GetInt32("cliente_id");
+                var clienteId = reader.GetInt32("id_cliente");
                 if (porId.TryGetValue(clienteId, out var c))
                     c.Telefones.Add(MapearTelefone(reader));
             }
@@ -107,12 +107,12 @@ public class ClienteRepository
         return cliente;
     }
 
-    // SELECT * FROM telefone_cliente WHERE cliente_id = @id
+    // SELECT * FROM telefone_cliente WHERE id_cliente = @id
     private static List<TelefoneCliente> ListarTelefones(MySqlConnection conexao, int clienteId)
     {
         var telefones = new List<TelefoneCliente>();
-        const string sql = @"SELECT id, cliente_id, numero, tipo
-                             FROM telefone_cliente WHERE cliente_id = @clienteId;";
+        const string sql = @"SELECT id, id_cliente, numero, tipo
+                             FROM telefone_cliente WHERE id_cliente = @clienteId;";
         using var cmd = new MySqlCommand(sql, conexao);
         cmd.Parameters.AddWithValue("@clienteId", clienteId);
         using var reader = cmd.ExecuteReader();
@@ -158,7 +158,7 @@ public class ClienteRepository
     private static TelefoneCliente MapearTelefone(MySqlDataReader reader) => new()
     {
         Id = reader.GetInt32("id"),
-        ClienteId = reader.GetInt32("cliente_id"),
+        ClienteId = reader.GetInt32("id_cliente"),
         Numero = reader.GetString("numero"),
         Tipo = reader.IsDBNull(reader.GetOrdinal("tipo")) ? null : reader.GetString("tipo")
     };

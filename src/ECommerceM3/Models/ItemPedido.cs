@@ -1,7 +1,7 @@
 namespace ECommerceM3.Models;
 
 // Associativa entre pedido e produto (tabela: item_pedido).
-// PK composta (pedido_id, produto_id) - nao possui id proprio.
+// PK composta (id_pedido, id_produto) - nao possui id proprio.
 public class ItemPedido
 {
     public int PedidoId { get; set; }

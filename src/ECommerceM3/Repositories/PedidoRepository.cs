@@ -10,8 +10,8 @@ public class PedidoRepository
 {
     // CREATE: insere o pedido e seus itens dentro de uma transacao.
     // SQL (resumo):
-    //   INSERT INTO pedido (cliente_id, status, valor_total) VALUES (...);
-    //   INSERT INTO item_pedido (pedido_id, produto_id, quantidade, preco_unitario) VALUES (...);
+    //   INSERT INTO pedido (id_cliente, status, valor_total) VALUES (...);
+    //   INSERT INTO item_pedido (id_pedido, id_produto, quantidade, preco_unitario) VALUES (...);
     //   UPDATE pedido SET valor_total = (SELECT SUM(...)) WHERE id = @id;
     public int Inserir(Pedido pedido)
     {
@@ -19,7 +19,7 @@ public class PedidoRepository
         using var tx = conexao.BeginTransaction();
         try
         {
-            const string sqlPedido = @"INSERT INTO pedido (cliente_id, status, valor_total)
+            const string sqlPedido = @"INSERT INTO pedido (id_cliente, status, valor_total)
                                        VALUES (@clienteId, @status, 0);
                                        SELECT LAST_INSERT_ID();";
             using (var cmd = new MySqlCommand(sqlPedido, conexao, tx))
@@ -64,7 +64,7 @@ public class PedidoRepository
     // INSERT INTO item_pedido (...) VALUES (...)
     private static void InserirItem(MySqlConnection conexao, MySqlTransaction tx, int pedidoId, ItemPedido item)
     {
-        const string sql = @"INSERT INTO item_pedido (pedido_id, produto_id, quantidade, preco_unitario)
+        const string sql = @"INSERT INTO item_pedido (id_pedido, id_produto, quantidade, preco_unitario)
                              VALUES (@pedidoId, @produtoId, @quantidade, @preco);";
         using var cmd = new MySqlCommand(sql, conexao, tx);
         cmd.Parameters.AddWithValue("@pedidoId", pedidoId);
@@ -80,7 +80,7 @@ public class PedidoRepository
         const string sql = @"UPDATE pedido p
                              SET p.valor_total = (
                                  SELECT COALESCE(SUM(ip.quantidade * ip.preco_unitario), 0)
-                                 FROM item_pedido ip WHERE ip.pedido_id = p.id)
+                                 FROM item_pedido ip WHERE ip.id_pedido = p.id)
                              WHERE p.id = @id;";
         using var cmd = new MySqlCommand(sql, conexao, tx);
         cmd.Parameters.AddWithValue("@id", pedidoId);
@@ -92,10 +92,10 @@ public class PedidoRepository
     {
         var lista = new List<Pedido>();
         using var conexao = Conexao.Criar();
-        const string sql = @"SELECT pe.id, pe.cliente_id, pe.data_pedido, pe.status,
+        const string sql = @"SELECT pe.id, pe.id_cliente, pe.data_pedido, pe.status,
                                     pe.valor_total, c.nome AS cliente_nome
                              FROM pedido pe
-                             INNER JOIN cliente c ON c.id = pe.cliente_id
+                             INNER JOIN cliente c ON c.id = pe.id_cliente
                              ORDER BY pe.data_pedido DESC;";
         using var cmd = new MySqlCommand(sql, conexao);
         using var reader = cmd.ExecuteReader();
@@ -108,10 +108,10 @@ public class PedidoRepository
     public Pedido? BuscarPorId(int id)
     {
         using var conexao = Conexao.Criar();
-        const string sql = @"SELECT pe.id, pe.cliente_id, pe.data_pedido, pe.status,
+        const string sql = @"SELECT pe.id, pe.id_cliente, pe.data_pedido, pe.status,
                                     pe.valor_total, c.nome AS cliente_nome
                              FROM pedido pe
-                             INNER JOIN cliente c ON c.id = pe.cliente_id
+                             INNER JOIN cliente c ON c.id = pe.id_cliente
                              WHERE pe.id = @id;";
         Pedido? pedido;
         using (var cmd = new MySqlCommand(sql, conexao))
@@ -131,11 +131,11 @@ public class PedidoRepository
     private static List<ItemPedido> ListarItens(MySqlConnection conexao, int pedidoId)
     {
         var itens = new List<ItemPedido>();
-        const string sql = @"SELECT ip.pedido_id, ip.produto_id, ip.quantidade,
+        const string sql = @"SELECT ip.id_pedido, ip.id_produto, ip.quantidade,
                                     ip.preco_unitario, pr.nome AS produto_nome
                              FROM item_pedido ip
-                             INNER JOIN produto pr ON pr.id = ip.produto_id
-                             WHERE ip.pedido_id = @pedidoId;";
+                             INNER JOIN produto pr ON pr.id = ip.id_produto
+                             WHERE ip.id_pedido = @pedidoId;";
         using var cmd = new MySqlCommand(sql, conexao);
         cmd.Parameters.AddWithValue("@pedidoId", pedidoId);
         using var reader = cmd.ExecuteReader();
@@ -143,8 +143,8 @@ public class PedidoRepository
         {
             itens.Add(new ItemPedido
             {
-                PedidoId = reader.GetInt32("pedido_id"),
-                ProdutoId = reader.GetInt32("produto_id"),
+                PedidoId = reader.GetInt32("id_pedido"),
+                ProdutoId = reader.GetInt32("id_produto"),
                 Quantidade = reader.GetInt32("quantidade"),
                 PrecoUnitario = reader.GetDecimal("preco_unitario"),
                 ProdutoNome = reader.GetString("produto_nome")
@@ -177,7 +177,7 @@ public class PedidoRepository
     private static Pedido Mapear(MySqlDataReader reader) => new()
     {
         Id = reader.GetInt32("id"),
-        ClienteId = reader.GetInt32("cliente_id"),
+        ClienteId = reader.GetInt32("id_cliente"),
         DataPedido = reader.GetDateTime("data_pedido"),
         Status = reader.GetString("status"),
         ValorTotal = reader.GetDecimal("valor_total"),

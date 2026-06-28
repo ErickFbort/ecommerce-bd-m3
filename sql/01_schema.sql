@@ -39,16 +39,16 @@ CREATE TABLE cliente (
 -- Tabela: telefone_cliente
 -- Telefone e um atributo MULTIVALORADO do cliente; pela 1FN ele e
 -- extraido para uma tabela propria (um cliente pode ter varios telefones).
--- Relacionamento non-identifying: a FK cliente_id NAO faz parte da PK.
+-- Relacionamento non-identifying: a FK id_cliente NAO faz parte da PK.
 -- ---------------------------------------------------------------------
 CREATE TABLE telefone_cliente (
     id         INT         NOT NULL AUTO_INCREMENT,
-    cliente_id INT         NOT NULL,
+    id_cliente INT         NOT NULL,
     numero     VARCHAR(20) NOT NULL,
     tipo       VARCHAR(20) NULL,
     CONSTRAINT pk_telefone_cliente PRIMARY KEY (id),
     CONSTRAINT fk_telefone_cliente_cliente
-        FOREIGN KEY (cliente_id) REFERENCES cliente (id) ON DELETE CASCADE
+        FOREIGN KEY (id_cliente) REFERENCES cliente (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -73,10 +73,10 @@ CREATE TABLE produto (
     descricao    VARCHAR(500)   NULL,
     preco        DECIMAL(10,2)  NOT NULL,
     estoque      INT            NOT NULL DEFAULT 0,
-    categoria_id INT            NOT NULL,
+    id_categoria INT            NOT NULL,
     CONSTRAINT pk_produto PRIMARY KEY (id),
     CONSTRAINT fk_produto_categoria
-        FOREIGN KEY (categoria_id) REFERENCES categoria (id),
+        FOREIGN KEY (id_categoria) REFERENCES categoria (id),
     CONSTRAINT ck_produto_preco   CHECK (preco >= 0),
     CONSTRAINT ck_produto_estoque CHECK (estoque >= 0)
 ) ENGINE=InnoDB;
@@ -87,13 +87,13 @@ CREATE TABLE produto (
 -- ---------------------------------------------------------------------
 CREATE TABLE pedido (
     id          INT            NOT NULL AUTO_INCREMENT,
-    cliente_id  INT            NOT NULL,
+    id_cliente  INT            NOT NULL,
     data_pedido DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status      VARCHAR(30)    NOT NULL DEFAULT 'PENDENTE',
     valor_total DECIMAL(10,2)  NOT NULL DEFAULT 0.00,
     CONSTRAINT pk_pedido PRIMARY KEY (id),
     CONSTRAINT fk_pedido_cliente
-        FOREIGN KEY (cliente_id) REFERENCES cliente (id),
+        FOREIGN KEY (id_cliente) REFERENCES cliente (id),
     CONSTRAINT ck_pedido_valor CHECK (valor_total >= 0)
 ) ENGINE=InnoDB;
 
@@ -102,18 +102,18 @@ CREATE TABLE pedido (
 -- Resolve o relacionamento muitos-para-muitos guardando a quantidade
 -- e o preco unitario praticado no momento da compra.
 -- ---------------------------------------------------------------------
--- A chave primaria e COMPOSTA pelas FKs das duas entidades (pedido_id, produto_id),
+-- A chave primaria e COMPOSTA pelas FKs das duas entidades (id_pedido, id_produto),
 -- caracterizando relacionamentos identifying (a tabela filha nao existe sem as maes).
 CREATE TABLE item_pedido (
-    pedido_id      INT            NOT NULL,
-    produto_id     INT            NOT NULL,
+    id_pedido      INT            NOT NULL,
+    id_produto     INT            NOT NULL,
     quantidade     INT            NOT NULL,
     preco_unitario DECIMAL(10,2)  NOT NULL,
-    CONSTRAINT pk_item_pedido PRIMARY KEY (pedido_id, produto_id),
+    CONSTRAINT pk_item_pedido PRIMARY KEY (id_pedido, id_produto),
     CONSTRAINT fk_item_pedido_pedido
-        FOREIGN KEY (pedido_id) REFERENCES pedido (id) ON DELETE CASCADE,
+        FOREIGN KEY (id_pedido) REFERENCES pedido (id) ON DELETE CASCADE,
     CONSTRAINT fk_item_pedido_produto
-        FOREIGN KEY (produto_id) REFERENCES produto (id),
+        FOREIGN KEY (id_produto) REFERENCES produto (id),
     CONSTRAINT ck_item_quantidade CHECK (quantidade > 0),
     CONSTRAINT ck_item_preco      CHECK (preco_unitario >= 0)
 ) ENGINE=InnoDB;

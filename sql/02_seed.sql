@@ -30,7 +30,7 @@ INSERT INTO categoria (id, nome, descricao) VALUES
 -- ---------------------------------------------------------------------
 -- Produtos
 -- ---------------------------------------------------------------------
-INSERT INTO produto (id, nome, descricao, preco, estoque, categoria_id) VALUES
+INSERT INTO produto (id, nome, descricao, preco, estoque, id_categoria) VALUES
     (1,  'Smartphone Galaxy A55', 'Tela 6.6", 256GB, 8GB RAM',          1899.90,  30, 1),
     (2,  'Notebook Ideapad 3',    'Ryzen 5, 16GB RAM, SSD 512GB',       3299.00,  15, 1),
     (3,  'Fone Bluetooth JBL',    'Fone intra-auricular sem fio',        249.90,  80, 1),
@@ -55,7 +55,7 @@ INSERT INTO cliente (id, nome, email, cpf, data_cadastro) VALUES
 -- ---------------------------------------------------------------------
 -- Telefones dos clientes (atributo multivalorado). A Ana possui 2 numeros.
 -- ---------------------------------------------------------------------
-INSERT INTO telefone_cliente (cliente_id, numero, tipo) VALUES
+INSERT INTO telefone_cliente (id_cliente, numero, tipo) VALUES
     (1, '(47) 99911-1111', 'CELULAR'),
     (1, '(47) 3344-1111',  'RESIDENCIAL'),
     (2, '(47) 99922-2222', 'CELULAR'),
@@ -68,7 +68,7 @@ INSERT INTO telefone_cliente (cliente_id, numero, tipo) VALUES
 -- O valor_total e definido como 0 aqui e recalculado a partir dos itens
 -- pelo UPDATE no final do script (garante consistencia com item_pedido).
 -- ---------------------------------------------------------------------
-INSERT INTO pedido (id, cliente_id, data_pedido, status, valor_total) VALUES
+INSERT INTO pedido (id, id_cliente, data_pedido, status, valor_total) VALUES
     (1, 1, '2026-05-02 10:15:00', 'ENTREGUE',    0.00),
     (2, 2, '2026-05-10 16:40:00', 'ENVIADO',     0.00),
     (3, 3, '2026-05-15 13:05:00', 'PENDENTE',    0.00),
@@ -78,7 +78,7 @@ INSERT INTO pedido (id, cliente_id, data_pedido, status, valor_total) VALUES
 -- ---------------------------------------------------------------------
 -- Itens dos pedidos (tabela associativa)
 -- ---------------------------------------------------------------------
-INSERT INTO item_pedido (pedido_id, produto_id, quantidade, preco_unitario) VALUES
+INSERT INTO item_pedido (id_pedido, id_produto, quantidade, preco_unitario) VALUES
     -- Pedido 1: Smartphone + Fone
     (1, 1, 1, 1899.90),
     (1, 3, 1,  249.90),
@@ -101,5 +101,5 @@ UPDATE pedido p
 SET p.valor_total = (
     SELECT COALESCE(SUM(ip.quantidade * ip.preco_unitario), 0)
     FROM item_pedido ip
-    WHERE ip.pedido_id = p.id
+    WHERE ip.id_pedido = p.id
 );
