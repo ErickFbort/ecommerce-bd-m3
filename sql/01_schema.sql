@@ -86,18 +86,18 @@ CREATE TABLE pedido (
 -- Resolve o relacionamento muitos-para-muitos guardando a quantidade
 -- e o preco unitario praticado no momento da compra.
 -- ---------------------------------------------------------------------
+-- A chave primaria e COMPOSTA pelas FKs das duas entidades (pedido_id, produto_id),
+-- caracterizando relacionamentos identifying (a tabela filha nao existe sem as maes).
 CREATE TABLE item_pedido (
-    id             INT            NOT NULL AUTO_INCREMENT,
     pedido_id      INT            NOT NULL,
     produto_id     INT            NOT NULL,
     quantidade     INT            NOT NULL,
     preco_unitario DECIMAL(10,2)  NOT NULL,
-    CONSTRAINT pk_item_pedido PRIMARY KEY (id),
+    CONSTRAINT pk_item_pedido PRIMARY KEY (pedido_id, produto_id),
     CONSTRAINT fk_item_pedido_pedido
         FOREIGN KEY (pedido_id) REFERENCES pedido (id) ON DELETE CASCADE,
     CONSTRAINT fk_item_pedido_produto
         FOREIGN KEY (produto_id) REFERENCES produto (id),
-    CONSTRAINT uq_item_pedido UNIQUE (pedido_id, produto_id),
     CONSTRAINT ck_item_quantidade CHECK (quantidade > 0),
     CONSTRAINT ck_item_preco      CHECK (preco_unitario >= 0)
 ) ENGINE=InnoDB;

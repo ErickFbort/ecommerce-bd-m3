@@ -131,7 +131,7 @@ public class PedidoRepository
     private static List<ItemPedido> ListarItens(MySqlConnection conexao, int pedidoId)
     {
         var itens = new List<ItemPedido>();
-        const string sql = @"SELECT ip.id, ip.pedido_id, ip.produto_id, ip.quantidade,
+        const string sql = @"SELECT ip.pedido_id, ip.produto_id, ip.quantidade,
                                     ip.preco_unitario, pr.nome AS produto_nome
                              FROM item_pedido ip
                              INNER JOIN produto pr ON pr.id = ip.produto_id
@@ -143,7 +143,6 @@ public class PedidoRepository
         {
             itens.Add(new ItemPedido
             {
-                Id = reader.GetInt32("id"),
                 PedidoId = reader.GetInt32("pedido_id"),
                 ProdutoId = reader.GetInt32("produto_id"),
                 Quantidade = reader.GetInt32("quantidade"),

@@ -1,0 +1,110 @@
+<svg viewBox="0 0 1240 820" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <style>
+    .ent{fill:#1d4ed8;stroke:#1e3a8a;stroke-width:1.4}
+    .entT{fill:#ffffff;font-size:15px;font-weight:bold;text-anchor:middle}
+    .rel{fill:#ea580c;stroke:#9a3412;stroke-width:1.4}
+    .relT{fill:#ffffff;font-size:12.5px;font-weight:bold;text-anchor:middle}
+    .att{fill:#ffffff;stroke:#94a3b8;stroke-width:1.2}
+    .attT{fill:#0f172a;font-size:12.5px;text-anchor:middle}
+    .pk{text-decoration:underline}
+    .ln{stroke:#64748b;stroke-width:1.4}
+    .card{fill:#b91c1c;font-size:12px;font-weight:bold;text-anchor:middle}
+    .title{fill:#0f172a;font-size:20px;font-weight:bold;text-anchor:middle}
+    .leg{fill:#334155;font-size:12.5px}
+  </style>
+
+  <rect x="0" y="0" width="1240" height="820" fill="#ffffff" stroke="#e2e8f0"/>
+  <text class="title" x="620" y="46">DER conceitual — e-Commerce</text>
+
+  <!-- spine connectors -->
+  <line class="ln" x1="205" y1="410" x2="243" y2="410"/>
+  <line class="ln" x1="367" y1="410" x2="405" y2="410"/>
+  <line class="ln" x1="535" y1="410" x2="573" y2="410"/>
+  <line class="ln" x1="697" y1="410" x2="735" y2="410"/>
+  <line class="ln" x1="865" y1="410" x2="898" y2="410"/>
+  <line class="ln" x1="1022" y1="410" x2="1055" y2="410"/>
+
+  <!-- cardinalities -->
+  <text class="card" x="224" y="398">(1,1)</text>
+  <text class="card" x="386" y="398">(0,N)</text>
+  <text class="card" x="554" y="398">(0,N)</text>
+  <text class="card" x="716" y="398">(1,N)</text>
+  <text class="card" x="881" y="398">(0,N)</text>
+  <text class="card" x="1038" y="398">(1,1)</text>
+
+  <!-- attribute connectors -->
+  <line class="ln" x1="60"  y1="317" x2="135" y2="383"/>
+  <line class="ln" x1="150" y1="317" x2="140" y2="381"/>
+  <line class="ln" x1="240" y1="317" x2="150" y2="381"/>
+  <line class="ln" x1="60"  y1="503" x2="135" y2="437"/>
+  <line class="ln" x1="150" y1="503" x2="140" y2="439"/>
+  <line class="ln" x1="250" y1="503" x2="150" y2="439"/>
+
+  <line class="ln" x1="405" y1="317" x2="465" y2="381"/>
+  <line class="ln" x1="535" y1="317" x2="475" y2="381"/>
+  <line class="ln" x1="405" y1="503" x2="465" y2="439"/>
+  <line class="ln" x1="535" y1="503" x2="475" y2="439"/>
+
+  <line class="ln" x1="705" y1="302" x2="790" y2="381"/>
+  <line class="ln" x1="800" y1="327" x2="800" y2="381"/>
+  <line class="ln" x1="895" y1="302" x2="810" y2="381"/>
+  <line class="ln" x1="745" y1="503" x2="790" y2="439"/>
+  <line class="ln" x1="855" y1="503" x2="810" y2="439"/>
+
+  <line class="ln" x1="1075" y1="317" x2="1115" y2="381"/>
+  <line class="ln" x1="1175" y1="337" x2="1125" y2="381"/>
+  <line class="ln" x1="1120" y1="503" x2="1120" y2="439"/>
+
+  <line class="ln" x1="575" y1="543" x2="630" y2="446"/>
+  <line class="ln" x1="705" y1="543" x2="640" y2="446"/>
+
+  <!-- CLIENTE attributes -->
+  <ellipse class="att" cx="60"  cy="300" rx="47" ry="17"/><text class="attT pk" x="60"  y="304">id_cliente</text>
+  <ellipse class="att" cx="150" cy="300" rx="47" ry="17"/><text class="attT" x="150" y="304">nome</text>
+  <ellipse class="att" cx="240" cy="300" rx="47" ry="17"/><text class="attT" x="240" y="304">email</text>
+  <ellipse class="att" cx="60"  cy="520" rx="47" ry="17"/><text class="attT" x="60"  y="524">cpf</text>
+  <ellipse class="att" cx="150" cy="520" rx="47" ry="17"/><text class="attT" x="150" y="524">telefone</text>
+  <ellipse class="att" cx="250" cy="520" rx="55" ry="17"/><text class="attT" x="250" y="524">data_cadastro</text>
+
+  <!-- PEDIDO attributes -->
+  <ellipse class="att" cx="405" cy="300" rx="47" ry="17"/><text class="attT pk" x="405" y="304">id_pedido</text>
+  <ellipse class="att" cx="535" cy="300" rx="47" ry="17"/><text class="attT" x="535" y="304">status</text>
+  <ellipse class="att" cx="405" cy="520" rx="52" ry="17"/><text class="attT" x="405" y="524">data_pedido</text>
+  <ellipse class="att" cx="535" cy="520" rx="50" ry="17"/><text class="attT" x="535" y="524">valor_total</text>
+
+  <!-- PRODUTO attributes -->
+  <ellipse class="att" cx="705" cy="285" rx="50" ry="17"/><text class="attT pk" x="705" y="289">id_produto</text>
+  <ellipse class="att" cx="800" cy="310" rx="47" ry="17"/><text class="attT" x="800" y="314">nome</text>
+  <ellipse class="att" cx="895" cy="285" rx="50" ry="17"/><text class="attT" x="895" y="289">descricao</text>
+  <ellipse class="att" cx="745" cy="520" rx="47" ry="17"/><text class="attT" x="745" y="524">preco</text>
+  <ellipse class="att" cx="855" cy="520" rx="47" ry="17"/><text class="attT" x="855" y="524">estoque</text>
+
+  <!-- CATEGORIA attributes -->
+  <ellipse class="att" cx="1075" cy="300" rx="55" ry="17"/><text class="attT pk" x="1075" y="304">id_categoria</text>
+  <ellipse class="att" cx="1178" cy="322" rx="47" ry="17"/><text class="attT" x="1178" y="326">nome</text>
+  <ellipse class="att" cx="1120" cy="520" rx="50" ry="17"/><text class="attT" x="1120" y="524">descricao</text>
+
+  <!-- CONTEM relationship attributes -->
+  <ellipse class="att" cx="575" cy="560" rx="52" ry="17"/><text class="attT" x="575" y="564">quantidade</text>
+  <ellipse class="att" cx="705" cy="560" rx="58" ry="17"/><text class="attT" x="705" y="564">preco_unitario</text>
+
+  <!-- relationships (diamonds) -->
+  <polygon class="rel" points="243,410 305,376 367,410 305,444"/><text class="relT" x="305" y="414">realiza</text>
+  <polygon class="rel" points="573,410 635,376 697,410 635,444"/><text class="relT" x="635" y="414">contém</text>
+  <polygon class="rel" points="898,410 960,376 1022,410 960,444"/><text class="relT" x="960" y="414">classifica</text>
+
+  <!-- entities (rectangles) -->
+  <rect class="ent" x="75"   y="381" width="130" height="58" rx="6"/><text class="entT" x="140"  y="415">CLIENTE</text>
+  <rect class="ent" x="405"  y="381" width="130" height="58" rx="6"/><text class="entT" x="470"  y="415">PEDIDO</text>
+  <rect class="ent" x="735"  y="381" width="130" height="58" rx="6"/><text class="entT" x="800"  y="415">PRODUTO</text>
+  <rect class="ent" x="1055" y="381" width="130" height="58" rx="6"/><text class="entT" x="1120" y="415">CATEGORIA</text>
+
+  <!-- legend -->
+  <rect class="ent" x="80" y="700" width="26" height="16" rx="3"/>
+  <text class="leg" x="114" y="713">Entidade</text>
+  <polygon class="rel" points="212,708 232,698 252,708 232,718"/>
+  <text class="leg" x="262" y="713">Relacionamento</text>
+  <ellipse class="att" cx="430" cy="708" rx="20" ry="11"/>
+  <text class="leg" x="458" y="713">Atributo (PK sublinhado)</text>
+  <text class="leg" x="80" y="748">Cardinalidade (mín,máx): quantas ocorrências da entidade vizinha se associam a UMA ocorrência da entidade oposta (notação Chen).</text>
+</svg>

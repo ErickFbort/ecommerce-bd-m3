@@ -1,0 +1,147 @@
+<svg viewBox="0 0 1300 800" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <style>
+    .title{fill:#0f172a;font-size:20px;font-weight:bold;text-anchor:middle}
+    .tbl{fill:#ffffff;stroke:#475569;stroke-width:1.4}
+    .hdr{fill:#1d4ed8}
+    .hdrT{fill:#ffffff;font-size:14px;font-weight:bold;text-anchor:middle}
+    .col{fill:#0f172a;font-size:12.5px}
+    .colfk{fill:#b45309;font-size:12.5px}
+    .colpk{fill:#0f172a;font-size:12.5px;font-weight:bold;text-decoration:underline}
+    .typ{fill:#64748b;font-size:11.5px;text-anchor:end}
+    .tagpk{fill:#1d4ed8;font-size:10px;font-weight:bold}
+    .tagfk{fill:#b45309;font-size:10px;font-weight:bold}
+    .rowln{stroke:#e2e8f0;stroke-width:1}
+    .relS{stroke:#0f172a;stroke-width:1.7;fill:none}
+    .relD{stroke:#0f172a;stroke-width:1.7;fill:none;stroke-dasharray:6 4}
+    .mk{stroke:#0f172a;stroke-width:1.7;fill:none}
+    .clab{fill:#0f172a;font-size:12px;font-weight:bold;text-anchor:middle}
+    .leg{fill:#334155;font-size:12.5px}
+    .legB{fill:#0f172a;font-size:13px;font-weight:bold}
+  </style>
+
+  <rect x="0" y="0" width="1300" height="800" fill="#ffffff" stroke="#e2e8f0"/>
+  <text class="title" x="650" y="42">Diagrama Relacional (DR) — e-Commerce</text>
+
+  <!-- ===== relationship lines (drawn first, under tables) ===== -->
+  <!-- pedido (N) --- cliente (1) : non-identifying (dashed) -->
+  <line class="relD" x1="610" y1="150" x2="1000" y2="150"/>
+  <line class="mk" x1="636" y1="150" x2="610" y2="141"/>
+  <line class="mk" x1="636" y1="150" x2="610" y2="150"/>
+  <line class="mk" x1="636" y1="150" x2="610" y2="159"/>
+  <line class="mk" x1="974" y1="141" x2="974" y2="159"/>
+  <text class="clab" x="654" y="142">N</text>
+  <text class="clab" x="960" y="142">1</text>
+
+  <!-- produto (N) --- categoria (1) : non-identifying (dashed) -->
+  <line class="relD" x1="610" y1="540" x2="1000" y2="540"/>
+  <line class="mk" x1="636" y1="540" x2="610" y2="531"/>
+  <line class="mk" x1="636" y1="540" x2="610" y2="540"/>
+  <line class="mk" x1="636" y1="540" x2="610" y2="549"/>
+  <line class="mk" x1="974" y1="531" x2="974" y2="549"/>
+  <text class="clab" x="654" y="532">N</text>
+  <text class="clab" x="960" y="532">1</text>
+
+  <!-- pedido (1) --- item_pedido (N) : identifying (solid) -->
+  <path class="relS" d="M 380 200 H 330 V 375 H 300"/>
+  <line class="mk" x1="300" y1="375" x2="280" y2="366"/>
+  <line class="mk" x1="300" y1="375" x2="280" y2="375"/>
+  <line class="mk" x1="300" y1="375" x2="280" y2="384"/>
+  <line class="mk" x1="372" y1="191" x2="372" y2="209"/>
+  <text class="clab" x="360" y="186">1</text>
+  <text class="clab" x="315" y="367">N</text>
+
+  <!-- produto (1) --- item_pedido (N) : identifying (solid) -->
+  <path class="relS" d="M 380 520 H 350 V 420 H 300"/>
+  <line class="mk" x1="300" y1="420" x2="280" y2="411"/>
+  <line class="mk" x1="300" y1="420" x2="280" y2="420"/>
+  <line class="mk" x1="300" y1="420" x2="280" y2="429"/>
+  <line class="mk" x1="372" y1="511" x2="372" y2="529"/>
+  <text class="clab" x="360" y="506">1</text>
+  <text class="clab" x="315" y="436">N</text>
+
+  <!-- ===== item_pedido ===== -->
+  <rect class="tbl" x="60" y="300" width="220" height="150" rx="6"/>
+  <rect class="hdr" x="60" y="300" width="220" height="30" rx="6"/>
+  <rect class="hdr" x="60" y="318" width="220" height="12"/>
+  <text class="hdrT" x="170" y="320">item_pedido</text>
+  <line class="rowln" x1="60" y1="360" x2="280" y2="360"/>
+  <line class="rowln" x1="60" y1="390" x2="280" y2="390"/>
+  <line class="rowln" x1="60" y1="420" x2="280" y2="420"/>
+  <text class="tagpk" x="72" y="354">PK FK</text><text class="colpk" x="118" y="354">pedido_id</text><text class="typ" x="272" y="354">INT</text>
+  <text class="tagpk" x="72" y="384">PK FK</text><text class="colpk" x="118" y="384">produto_id</text><text class="typ" x="272" y="384">INT</text>
+  <text class="col" x="118" y="414">quantidade</text><text class="typ" x="272" y="414">INT</text>
+  <text class="col" x="118" y="444">preco_unitario</text><text class="typ" x="272" y="444">DECIMAL(10,2)</text>
+
+  <!-- ===== pedido ===== -->
+  <rect class="tbl" x="380" y="90" width="230" height="180" rx="6"/>
+  <rect class="hdr" x="380" y="90" width="230" height="30" rx="6"/>
+  <rect class="hdr" x="380" y="108" width="230" height="12"/>
+  <text class="hdrT" x="495" y="110">pedido</text>
+  <line class="rowln" x1="380" y1="150" x2="610" y2="150"/>
+  <line class="rowln" x1="380" y1="180" x2="610" y2="180"/>
+  <line class="rowln" x1="380" y1="210" x2="610" y2="210"/>
+  <line class="rowln" x1="380" y1="240" x2="610" y2="240"/>
+  <text class="tagpk" x="392" y="144">PK</text><text class="colpk" x="438" y="144">id</text><text class="typ" x="602" y="144">INT</text>
+  <text class="tagfk" x="392" y="174">FK</text><text class="colfk" x="438" y="174">cliente_id</text><text class="typ" x="602" y="174">INT</text>
+  <text class="col" x="438" y="204">data_pedido</text><text class="typ" x="602" y="204">DATETIME</text>
+  <text class="col" x="438" y="234">status</text><text class="typ" x="602" y="234">VARCHAR(30)</text>
+  <text class="col" x="438" y="264">valor_total</text><text class="typ" x="602" y="264">DECIMAL(10,2)</text>
+
+  <!-- ===== produto ===== -->
+  <rect class="tbl" x="380" y="470" width="230" height="210" rx="6"/>
+  <rect class="hdr" x="380" y="470" width="230" height="30" rx="6"/>
+  <rect class="hdr" x="380" y="488" width="230" height="12"/>
+  <text class="hdrT" x="495" y="490">produto</text>
+  <line class="rowln" x1="380" y1="530" x2="610" y2="530"/>
+  <line class="rowln" x1="380" y1="560" x2="610" y2="560"/>
+  <line class="rowln" x1="380" y1="590" x2="610" y2="590"/>
+  <line class="rowln" x1="380" y1="620" x2="610" y2="620"/>
+  <line class="rowln" x1="380" y1="650" x2="610" y2="650"/>
+  <text class="tagpk" x="392" y="524">PK</text><text class="colpk" x="438" y="524">id</text><text class="typ" x="602" y="524">INT</text>
+  <text class="col" x="438" y="554">nome</text><text class="typ" x="602" y="554">VARCHAR(150)</text>
+  <text class="col" x="438" y="584">descricao</text><text class="typ" x="602" y="584">VARCHAR(500)</text>
+  <text class="col" x="438" y="614">preco</text><text class="typ" x="602" y="614">DECIMAL(10,2)</text>
+  <text class="col" x="438" y="644">estoque</text><text class="typ" x="602" y="644">INT</text>
+  <text class="tagfk" x="392" y="674">FK</text><text class="colfk" x="438" y="674">categoria_id</text><text class="typ" x="602" y="674">INT</text>
+
+  <!-- ===== cliente ===== -->
+  <rect class="tbl" x="1000" y="90" width="240" height="210" rx="6"/>
+  <rect class="hdr" x="1000" y="90" width="240" height="30" rx="6"/>
+  <rect class="hdr" x="1000" y="108" width="240" height="12"/>
+  <text class="hdrT" x="1120" y="110">cliente</text>
+  <line class="rowln" x1="1000" y1="150" x2="1240" y2="150"/>
+  <line class="rowln" x1="1000" y1="180" x2="1240" y2="180"/>
+  <line class="rowln" x1="1000" y1="210" x2="1240" y2="210"/>
+  <line class="rowln" x1="1000" y1="240" x2="1240" y2="240"/>
+  <line class="rowln" x1="1000" y1="270" x2="1240" y2="270"/>
+  <text class="tagpk" x="1012" y="144">PK</text><text class="colpk" x="1058" y="144">id</text><text class="typ" x="1232" y="144">INT</text>
+  <text class="col" x="1058" y="174">nome</text><text class="typ" x="1232" y="174">VARCHAR(120)</text>
+  <text class="col" x="1058" y="204">email</text><text class="typ" x="1232" y="204">VARCHAR(120)</text>
+  <text class="col" x="1058" y="234">cpf</text><text class="typ" x="1232" y="234">VARCHAR(14)</text>
+  <text class="col" x="1058" y="264">telefone</text><text class="typ" x="1232" y="264">VARCHAR(20)</text>
+  <text class="col" x="1058" y="294">data_cadastro</text><text class="typ" x="1232" y="294">DATETIME</text>
+
+  <!-- ===== categoria ===== -->
+  <rect class="tbl" x="1000" y="470" width="240" height="120" rx="6"/>
+  <rect class="hdr" x="1000" y="470" width="240" height="30" rx="6"/>
+  <rect class="hdr" x="1000" y="488" width="240" height="12"/>
+  <text class="hdrT" x="1120" y="490">categoria</text>
+  <line class="rowln" x1="1000" y1="530" x2="1240" y2="530"/>
+  <line class="rowln" x1="1000" y1="560" x2="1240" y2="560"/>
+  <text class="tagpk" x="1012" y="524">PK</text><text class="colpk" x="1058" y="524">id</text><text class="typ" x="1232" y="524">INT</text>
+  <text class="col" x="1058" y="554">nome</text><text class="typ" x="1232" y="554">VARCHAR(80)</text>
+  <text class="col" x="1058" y="584">descricao</text><text class="typ" x="1232" y="584">VARCHAR(255)</text>
+
+  <!-- ===== legend ===== -->
+  <rect x="60" y="700" width="1180" height="80" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text class="legB" x="80" y="726">Legenda</text>
+  <line class="relS" x1="80" y1="748" x2="140" y2="748"/>
+  <text class="leg" x="150" y="752">Identifying (sólida): a FK faz parte da PK — caso de item_pedido (PK composta)</text>
+  <line class="relD" x1="80" y1="770" x2="140" y2="770"/>
+  <text class="leg" x="150" y="774">Non-identifying (tracejada): a FK é apenas uma coluna comum</text>
+  <line class="mk" x1="800" y1="748" x2="840" y2="748"/>
+  <line class="mk" x1="800" y1="748" x2="780" y2="739"/>
+  <line class="mk" x1="800" y1="748" x2="780" y2="757"/>
+  <text class="leg" x="852" y="752">Pé-de-galinha = lado "muitos" (N)</text>
+  <text class="tagpk" x="800" y="774">PK</text><text class="leg" x="824" y="774">chave primária    ·    </text><text class="tagfk" x="978" y="774">FK</text><text class="leg" x="1000" y="774">chave estrangeira</text>
+</svg>
