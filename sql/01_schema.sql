@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS item_pedido;
 DROP TABLE IF EXISTS pedido;
 DROP TABLE IF EXISTS produto;
 DROP TABLE IF EXISTS categoria;
+DROP TABLE IF EXISTS telefone_cliente;
 DROP TABLE IF EXISTS cliente;
 
 -- ---------------------------------------------------------------------
@@ -28,11 +29,26 @@ CREATE TABLE cliente (
     nome          VARCHAR(120) NOT NULL,
     email         VARCHAR(120) NOT NULL,
     cpf           VARCHAR(14)  NOT NULL,
-    telefone      VARCHAR(20)  NULL,
     data_cadastro DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT pk_cliente PRIMARY KEY (id),
     CONSTRAINT uq_cliente_email UNIQUE (email),
     CONSTRAINT uq_cliente_cpf   UNIQUE (cpf)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- Tabela: telefone_cliente
+-- Telefone e um atributo MULTIVALORADO do cliente; pela 1FN ele e
+-- extraido para uma tabela propria (um cliente pode ter varios telefones).
+-- Relacionamento non-identifying: a FK cliente_id NAO faz parte da PK.
+-- ---------------------------------------------------------------------
+CREATE TABLE telefone_cliente (
+    id         INT         NOT NULL AUTO_INCREMENT,
+    cliente_id INT         NOT NULL,
+    numero     VARCHAR(20) NOT NULL,
+    tipo       VARCHAR(20) NULL,
+    CONSTRAINT pk_telefone_cliente PRIMARY KEY (id),
+    CONSTRAINT fk_telefone_cliente_cliente
+        FOREIGN KEY (cliente_id) REFERENCES cliente (id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------

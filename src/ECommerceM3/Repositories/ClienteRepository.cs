@@ -5,66 +5,138 @@ using MySqlConnector;
 namespace ECommerceM3.Repositories;
 
 // CRUD da entidade Cliente usando ADO.NET (SQL escrito a mao, parametrizado).
+// Os telefones (multivalorados) vivem na tabela telefone_cliente.
 public class ClienteRepository
 {
-    // CREATE: INSERT INTO cliente (nome, email, cpf, telefone) VALUES (...)
+    // CREATE: insere o cliente e seus telefones dentro de uma transacao.
+    //   INSERT INTO cliente (nome, email, cpf) VALUES (...);
+    //   INSERT INTO telefone_cliente (cliente_id, numero, tipo) VALUES (...);
     public int Inserir(Cliente cliente)
     {
         using var conexao = Conexao.Criar();
-        const string sql = @"INSERT INTO cliente (nome, email, cpf, telefone)
-                             VALUES (@nome, @email, @cpf, @telefone);
-                             SELECT LAST_INSERT_ID();";
-        using var cmd = new MySqlCommand(sql, conexao);
-        cmd.Parameters.AddWithValue("@nome", cliente.Nome);
-        cmd.Parameters.AddWithValue("@email", cliente.Email);
-        cmd.Parameters.AddWithValue("@cpf", cliente.Cpf);
-        cmd.Parameters.AddWithValue("@telefone", (object?)cliente.Telefone ?? DBNull.Value);
-        return Convert.ToInt32(cmd.ExecuteScalar());
+        using var tx = conexao.BeginTransaction();
+        try
+        {
+            const string sql = @"INSERT INTO cliente (nome, email, cpf)
+                                 VALUES (@nome, @email, @cpf);
+                                 SELECT LAST_INSERT_ID();";
+            using (var cmd = new MySqlCommand(sql, conexao, tx))
+            {
+                cmd.Parameters.AddWithValue("@nome", cliente.Nome);
+                cmd.Parameters.AddWithValue("@email", cliente.Email);
+                cmd.Parameters.AddWithValue("@cpf", cliente.Cpf);
+                cliente.Id = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+
+            foreach (var tel in cliente.Telefones)
+                InserirTelefone(conexao, tx, cliente.Id, tel);
+
+            tx.Commit();
+            return cliente.Id;
+        }
+        catch
+        {
+            tx.Rollback();
+            throw;
+        }
     }
 
-    // READ (todos): SELECT * FROM cliente ORDER BY nome
+    // INSERT INTO telefone_cliente (cliente_id, numero, tipo) VALUES (...)
+    private static void InserirTelefone(MySqlConnection conexao, MySqlTransaction tx, int clienteId, TelefoneCliente tel)
+    {
+        const string sql = @"INSERT INTO telefone_cliente (cliente_id, numero, tipo)
+                             VALUES (@clienteId, @numero, @tipo);";
+        using var cmd = new MySqlCommand(sql, conexao, tx);
+        cmd.Parameters.AddWithValue("@clienteId", clienteId);
+        cmd.Parameters.AddWithValue("@numero", tel.Numero);
+        cmd.Parameters.AddWithValue("@tipo", (object?)tel.Tipo ?? DBNull.Value);
+        cmd.ExecuteNonQuery();
+    }
+
+    // READ (todos): carrega clientes e distribui os telefones por cliente.
     public List<Cliente> ListarTodos()
     {
         var lista = new List<Cliente>();
+        var porId = new Dictionary<int, Cliente>();
         using var conexao = Conexao.Criar();
-        const string sql = @"SELECT id, nome, email, cpf, telefone, data_cadastro
-                             FROM cliente ORDER BY nome;";
-        using var cmd = new MySqlCommand(sql, conexao);
-        using var reader = cmd.ExecuteReader();
-        while (reader.Read())
-            lista.Add(Mapear(reader));
+
+        const string sqlClientes = @"SELECT id, nome, email, cpf, data_cadastro
+                                     FROM cliente ORDER BY nome;";
+        using (var cmd = new MySqlCommand(sqlClientes, conexao))
+        using (var reader = cmd.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                var c = Mapear(reader);
+                lista.Add(c);
+                porId[c.Id] = c;
+            }
+        }
+
+        const string sqlTel = @"SELECT id, cliente_id, numero, tipo FROM telefone_cliente;";
+        using (var cmd = new MySqlCommand(sqlTel, conexao))
+        using (var reader = cmd.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                var clienteId = reader.GetInt32("cliente_id");
+                if (porId.TryGetValue(clienteId, out var c))
+                    c.Telefones.Add(MapearTelefone(reader));
+            }
+        }
         return lista;
     }
 
-    // READ (por id): SELECT * FROM cliente WHERE id = @id
+    // READ (por id): cliente + seus telefones
     public Cliente? BuscarPorId(int id)
     {
         using var conexao = Conexao.Criar();
-        const string sql = @"SELECT id, nome, email, cpf, telefone, data_cadastro
+        const string sql = @"SELECT id, nome, email, cpf, data_cadastro
                              FROM cliente WHERE id = @id;";
-        using var cmd = new MySqlCommand(sql, conexao);
-        cmd.Parameters.AddWithValue("@id", id);
-        using var reader = cmd.ExecuteReader();
-        return reader.Read() ? Mapear(reader) : null;
+        Cliente? cliente;
+        using (var cmd = new MySqlCommand(sql, conexao))
+        {
+            cmd.Parameters.AddWithValue("@id", id);
+            using var reader = cmd.ExecuteReader();
+            cliente = reader.Read() ? Mapear(reader) : null;
+        }
+
+        if (cliente != null)
+            cliente.Telefones = ListarTelefones(conexao, id);
+
+        return cliente;
     }
 
-    // UPDATE: UPDATE cliente SET ... WHERE id = @id
+    // SELECT * FROM telefone_cliente WHERE cliente_id = @id
+    private static List<TelefoneCliente> ListarTelefones(MySqlConnection conexao, int clienteId)
+    {
+        var telefones = new List<TelefoneCliente>();
+        const string sql = @"SELECT id, cliente_id, numero, tipo
+                             FROM telefone_cliente WHERE cliente_id = @clienteId;";
+        using var cmd = new MySqlCommand(sql, conexao);
+        cmd.Parameters.AddWithValue("@clienteId", clienteId);
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
+            telefones.Add(MapearTelefone(reader));
+        return telefones;
+    }
+
+    // UPDATE: atualiza apenas os dados escalares do cliente.
     public bool Atualizar(Cliente cliente)
     {
         using var conexao = Conexao.Criar();
         const string sql = @"UPDATE cliente
-                             SET nome = @nome, email = @email, cpf = @cpf, telefone = @telefone
+                             SET nome = @nome, email = @email, cpf = @cpf
                              WHERE id = @id;";
         using var cmd = new MySqlCommand(sql, conexao);
         cmd.Parameters.AddWithValue("@nome", cliente.Nome);
         cmd.Parameters.AddWithValue("@email", cliente.Email);
         cmd.Parameters.AddWithValue("@cpf", cliente.Cpf);
-        cmd.Parameters.AddWithValue("@telefone", (object?)cliente.Telefone ?? DBNull.Value);
         cmd.Parameters.AddWithValue("@id", cliente.Id);
         return cmd.ExecuteNonQuery() > 0;
     }
 
-    // DELETE: DELETE FROM cliente WHERE id = @id
+    // DELETE: remove o cliente. Os telefones caem por ON DELETE CASCADE.
     public bool Remover(int id)
     {
         using var conexao = Conexao.Criar();
@@ -80,7 +152,14 @@ public class ClienteRepository
         Nome = reader.GetString("nome"),
         Email = reader.GetString("email"),
         Cpf = reader.GetString("cpf"),
-        Telefone = reader.IsDBNull(reader.GetOrdinal("telefone")) ? null : reader.GetString("telefone"),
         DataCadastro = reader.GetDateTime("data_cadastro")
+    };
+
+    private static TelefoneCliente MapearTelefone(MySqlDataReader reader) => new()
+    {
+        Id = reader.GetInt32("id"),
+        ClienteId = reader.GetInt32("cliente_id"),
+        Numero = reader.GetString("numero"),
+        Tipo = reader.IsDBNull(reader.GetOrdinal("tipo")) ? null : reader.GetString("tipo")
     };
 }

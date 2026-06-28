@@ -63,7 +63,7 @@
   <ellipse class="att" cx="150" cy="300" rx="47" ry="17"/><text class="attT" x="150" y="304">nome</text>
   <ellipse class="att" cx="240" cy="300" rx="47" ry="17"/><text class="attT" x="240" y="304">email</text>
   <ellipse class="att" cx="60"  cy="520" rx="47" ry="17"/><text class="attT" x="60"  y="524">cpf</text>
-  <ellipse class="att" cx="150" cy="520" rx="47" ry="17"/><text class="attT" x="150" y="524">telefone</text>
+  <ellipse class="att" cx="150" cy="520" rx="51" ry="21" fill="none"/><ellipse class="att" cx="150" cy="520" rx="46" ry="16"/><text class="attT" x="150" y="524">telefone</text>
   <ellipse class="att" cx="250" cy="520" rx="55" ry="17"/><text class="attT" x="250" y="524">data_cadastro</text>
 
   <!-- PEDIDO attributes -->
@@ -106,5 +106,7 @@
   <text class="leg" x="262" y="713">Relacionamento</text>
   <ellipse class="att" cx="430" cy="708" rx="20" ry="11"/>
   <text class="leg" x="458" y="713">Atributo (PK sublinhado)</text>
+  <ellipse class="att" cx="720" cy="708" rx="22" ry="13" fill="none"/><ellipse class="att" cx="720" cy="708" rx="17" ry="9"/>
+  <text class="leg" x="750" y="713">Atributo multivalorado (borda dupla)</text>
   <text class="leg" x="80" y="748">Cardinalidade (mín,máx): quantas ocorrências da entidade vizinha se associam a UMA ocorrência da entidade oposta (notação Chen).</text>
 </svg>

@@ -63,16 +63,31 @@ internal static class Program
             {
                 case "1":
                     foreach (var c in Clientes.ListarTodos())
-                        Console.WriteLine($"  #{c.Id} | {c.Nome} | {c.Email} | {c.Cpf} | {c.Telefone}");
+                    {
+                        var tels = c.Telefones.Count > 0
+                            ? string.Join(", ", c.Telefones.Select(t => $"{t.Numero} ({t.Tipo})"))
+                            : "sem telefone";
+                        Console.WriteLine($"  #{c.Id} | {c.Nome} | {c.Email} | {c.Cpf} | {tels}");
+                    }
                     break;
                 case "2":
                     var novo = new Cliente
                     {
                         Nome = LerTexto("Nome"),
                         Email = LerTexto("Email"),
-                        Cpf = LerTexto("CPF"),
-                        Telefone = LerTexto("Telefone (opcional)", permitirVazio: true)
+                        Cpf = LerTexto("CPF")
                     };
+                    Console.WriteLine("Adicione telefones (deixe o numero vazio para encerrar):");
+                    while (true)
+                    {
+                        var numero = LerTexto("  Numero", permitirVazio: true);
+                        if (numero.Length == 0) break;
+                        novo.Telefones.Add(new TelefoneCliente
+                        {
+                            Numero = numero,
+                            Tipo = LerTexto("  Tipo (CELULAR/RESIDENCIAL/...)", permitirVazio: true)
+                        });
+                    }
                     Console.WriteLine($"Cliente criado com id {Clientes.Inserir(novo)}.");
                     break;
                 case "3":
@@ -82,7 +97,6 @@ internal static class Program
                     existente.Nome = LerTexto($"Nome [{existente.Nome}]", permitirVazio: true) is { Length: > 0 } n ? n : existente.Nome;
                     existente.Email = LerTexto($"Email [{existente.Email}]", permitirVazio: true) is { Length: > 0 } e ? e : existente.Email;
                     existente.Cpf = LerTexto($"CPF [{existente.Cpf}]", permitirVazio: true) is { Length: > 0 } cpf ? cpf : existente.Cpf;
-                    existente.Telefone = LerTexto($"Telefone [{existente.Telefone}]", permitirVazio: true) is { Length: > 0 } t ? t : existente.Telefone;
                     Console.WriteLine(Clientes.Atualizar(existente) ? "Atualizado." : "Nada alterado.");
                     break;
                 case "4":

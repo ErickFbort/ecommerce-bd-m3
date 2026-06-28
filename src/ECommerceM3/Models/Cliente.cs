@@ -7,6 +7,8 @@ public class Cliente
     public string Nome { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Cpf { get; set; } = string.Empty;
-    public string? Telefone { get; set; }
     public DateTime DataCadastro { get; set; }
+
+    // Telefones do cliente (tabela telefone_cliente) - atributo multivalorado
+    public List<TelefoneCliente> Telefones { get; set; } = new();
 }

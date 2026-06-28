@@ -13,6 +13,7 @@ TRUNCATE TABLE item_pedido;
 TRUNCATE TABLE pedido;
 TRUNCATE TABLE produto;
 TRUNCATE TABLE categoria;
+TRUNCATE TABLE telefone_cliente;
 TRUNCATE TABLE cliente;
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -44,12 +45,23 @@ INSERT INTO produto (id, nome, descricao, preco, estoque, categoria_id) VALUES
 -- ---------------------------------------------------------------------
 -- Clientes
 -- ---------------------------------------------------------------------
-INSERT INTO cliente (id, nome, email, cpf, telefone, data_cadastro) VALUES
-    (1, 'Ana Souza',     'ana.souza@email.com',     '111.111.111-11', '(47) 99911-1111', '2026-01-10 09:30:00'),
-    (2, 'Bruno Lima',    'bruno.lima@email.com',    '222.222.222-22', '(47) 99922-2222', '2026-02-05 14:10:00'),
-    (3, 'Carla Mendes',  'carla.mendes@email.com',  '333.333.333-33', '(47) 99933-3333', '2026-02-20 18:45:00'),
-    (4, 'Diego Rocha',   'diego.rocha@email.com',   '444.444.444-44', '(47) 99944-4444', '2026-03-12 11:00:00'),
-    (5, 'Elaine Castro', 'elaine.castro@email.com', '555.555.555-55', '(47) 99955-5555', '2026-04-01 08:20:00');
+INSERT INTO cliente (id, nome, email, cpf, data_cadastro) VALUES
+    (1, 'Ana Souza',     'ana.souza@email.com',     '111.111.111-11', '2026-01-10 09:30:00'),
+    (2, 'Bruno Lima',    'bruno.lima@email.com',    '222.222.222-22', '2026-02-05 14:10:00'),
+    (3, 'Carla Mendes',  'carla.mendes@email.com',  '333.333.333-33', '2026-02-20 18:45:00'),
+    (4, 'Diego Rocha',   'diego.rocha@email.com',   '444.444.444-44', '2026-03-12 11:00:00'),
+    (5, 'Elaine Castro', 'elaine.castro@email.com', '555.555.555-55', '2026-04-01 08:20:00');
+
+-- ---------------------------------------------------------------------
+-- Telefones dos clientes (atributo multivalorado). A Ana possui 2 numeros.
+-- ---------------------------------------------------------------------
+INSERT INTO telefone_cliente (cliente_id, numero, tipo) VALUES
+    (1, '(47) 99911-1111', 'CELULAR'),
+    (1, '(47) 3344-1111',  'RESIDENCIAL'),
+    (2, '(47) 99922-2222', 'CELULAR'),
+    (3, '(47) 99933-3333', 'CELULAR'),
+    (4, '(47) 99944-4444', 'CELULAR'),
+    (5, '(47) 99955-5555', 'CELULAR');
 
 -- ---------------------------------------------------------------------
 -- Pedidos
