@@ -1,0 +1,11 @@
+# Build do .NET
+bin/
+obj/
+
+# IDE
+.vs/
+.vscode/
+*.user
+
+# Sistema
+.DS_Store
